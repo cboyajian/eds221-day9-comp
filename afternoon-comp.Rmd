@@ -76,6 +76,7 @@ troubleshooting <- penguins %>%
 
 ```{r}
 library(tidyverse)
+library(reprex)
 
 df <- tribble(
   ~name, ~height, ~hair_color,
@@ -86,7 +87,6 @@ df <- tribble(
 
 df %>% 
   filter(name == "Waffle")
-
 
 ```
 
