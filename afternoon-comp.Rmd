@@ -1,0 +1,105 @@
+---
+title: "Day 9 Comp"
+author: "Clarissa Boyajian"
+date: "8/19/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(palmerpenguins)
+library(lubridate)
+library(kableExtra)
+library(janitor)
+```
+
+
+
+### `janitor::get_dupes()`
+```{r}
+starwars_dupes <- get_dupes(dat = starwars)
+
+starwars_dupes_hair <- starwars %>% 
+  get_dupes(hair_color)
+
+starwars_dupes_ec_hc <- starwars %>% 
+  get_dupes(eye_color, hair_color)
+
+```
+
+### `dplyr::across()`
+
+```{r}
+sw_across <- starwars %>% 
+  mutate(across(where(is.character), tolower))
+```
+
+Find the mean of all 
+```{r}
+starwars %>% 
+  group_by(homeworld) %>% 
+  summarize(across(where(is.numeric), mean, na.rm = TRUE))
+
+```
+
+## Basic and common troublshooting stuff
+```{r}
+starwars %>% 
+  filter(homeworld == "Naboo")
+```
+
+```{r}
+starwars %>% 
+  separate(skin_color, into = c("col_1", "col_2"), sep = ",")
+
+```
+
+```{r}
+ggplot(mtcars, aes(x = wt, y = mpg)) + 
+  geom_point()
+```
+
+Sequence of wrangling steps:
+```{r}
+troubleshooting <- penguins %>% 
+  mutate(across(where(is.numeric), as.character)) %>% 
+  mutate(island = fct_relevel(island, c("Dream", "Biscoe", "Torgersen"))) %>% 
+  unite(island_yr, c(island, year), sep = "_", remove = FALSE) %>% 
+  filter(species %in% c("Adelie", "Chinstrap")) %>% 
+  relocate(year, .after = species) %>% 
+  rename(penguin_spp = species)
+```
+
+
+### Making a reprex:
+
+```{r}
+library(tidyverse)
+
+df <- tribble(
+  ~name, ~height, ~hair_color,
+  "Teddy", 2.2, "brown",
+  "Khora", 3.1, "white",
+  "Waffle", 1.0, "tan"
+)
+
+df %>% 
+  filter(name == "Waffle")
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
